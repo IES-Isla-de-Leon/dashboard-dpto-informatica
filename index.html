@@ -12,17 +12,26 @@
         margin: 0;
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: stretch;
         background: #111;
         color: #f4f4f4;
         font-family: "Segoe UI", Roboto, sans-serif;
         text-align: center;
+        gap: 3rem;
       }
 
-      #wrapper {
+      #wrapper-left {
         display: flex;
         flex-direction: column;
+        align-items: center;
+        justify-content: center;;
         gap: 0.6rem;
+      }
+
+      #wrapper-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
       }
 
       #time {
@@ -89,17 +98,37 @@
         background: #ee2222;
         color: #fff;
       }
+
+
+      .event {
+        display: flex;        
+        padding: 1rem;
+      }
+      .event + .event {
+        border-top: 1px solid white;
+      }
+      .event-date {
+        width: 8rem; 
+      }
+      .event-title {
+        font-weight: bold;
+      }
     </style>
   </head>
 
   <body>
-    <div id="wrapper">
+    <div id="wrapper-left">
       <div id="date"></div>
       <div id="time"></div>
       <div id="schoolDays" class="counter"></div>
       <div id="workDays" class="counter"></div>
       <div id="message"></div>
       <div id="calendar"></div>
+    </div>
+
+    <div id="wrapper-right">
+      <h2>Lista de eventos</h2>
+      <div id="event-list"></div>
     </div>
 
     <script>
@@ -159,11 +188,15 @@
        * CARGA DE DATOS DESDE GOOGLE SHEETS
        ********************************************************************/
       let loadedValues = { default: "¡Que tengas un gran día!" };
+      let loadedEvents = [];
+
       async function fetchSheetValues() {
         if (!GOOGLE_SHEET_ID || GOOGLE_SHEET_ID.includes("<TU_SHEET_ID>")) {
           console.warn("GOOGLE_SHEET_ID no configurado.");
           return;
         }
+        loadedEvents = [];
+
         try {
           const res = await fetch(MESSAGE_SHEET_URL, { cache: "no-store" });
           if (!res.ok) throw new Error(res.statusText);
@@ -172,8 +205,15 @@
           rows.forEach(({ key = "", value = "" }) => {
             const k = key.trim();
             if (k) map[k] = value;
+            if (k.startsWith("evento")){
+              loadedEvents.push([k.slice(6), value]);
+            }
           });
           loadedValues = map;
+
+          loadedEvents.push(["Último día lectivo", loadedValues["end_school_date"] || DEFAULT_END_SCHOOL_DATE]);
+          loadedEvents.push(["Último día laborable", loadedValues["end_work_date"] || DEFAULT_END_WORK_DATE]);
+
           updateCounters();
           renderCalendar();
         } catch (e) {
@@ -205,12 +245,18 @@
           );
         let html = "";
         weekdays.forEach((w) => (html += `<div class="day header">${w}</div>`));
+
+        const loadedEventsDates = loadedEvents.map((elem) => elem[1]);
+
         for (let i = 0; i < offset; i++) html += "<div></div>";
         for (let d = 1; d <= daysInMonth; d++) {
           const dateNative = new Date(year, month, d);
           const dateIso = iso(dateNative);
           let cls = "day";
           if (dateIso === todayIso) cls += " today";
+
+          if (loadedEventsDates.indexOf(dateIso) != -1) cls += " lastLective";
+
           if (dateIso === endSchoolIso) cls += " lastLective";
           if (dateIso === endWorkIso) cls += " lastWork";
           if (dateNative.getDay() == 0 || dateNative.getDay() == 6) cls += " weekend";
@@ -250,6 +296,24 @@
           loadedValues["message"] || loadedValues.default || "";
       }
 
+      function updateEvents() {
+        let eventListElement = document.getElementById("event-list");
+
+        let innerHTML = "";
+
+        for (let index = 0; index < loadedEvents.length; index++) {
+          const evt = loadedEvents[index];
+          let eventElement = '<div class="event">';
+          eventElement += `<div class="event-date">${evt[1]}</div>`;
+          eventElement += `<div class="event-title">${evt[0]}</div>`;
+          eventElement += '</div>';
+
+          innerHTML += eventElement;          
+        }
+
+        eventListElement.innerHTML = innerHTML;
+      }
+
       /*********************************************************************
        * INICIALIZACIÓN
        ********************************************************************/
@@ -257,6 +321,7 @@
         await fetchSheetValues();
         updateCounters();
         updateClock();
+        updateEvents();
         renderCalendar();
         setInterval(fetchSheetValues, 15 * 60 * 1000);
         setInterval(updateClock, 1000);
