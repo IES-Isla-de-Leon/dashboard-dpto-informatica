@@ -24,6 +24,8 @@
 </template>
 
 <script setup>
+import { PERIOD_COLORS } from '../config/periodColors.js';
+
 defineProps({
   title: {
     type: String,
@@ -64,9 +66,12 @@ function dayClass(cssClass) {
     return `border-teal-300 bg-teal-200 text-teal-900${pastModifier}`;
   }
   if (cssClass.includes("periodDay")) {
-    return `border-indigo-300 bg-indigo-100 text-indigo-900${pastModifier}`;
-  }  
-  
+    const match = cssClass.match(/\bperiod-(\d+)\b/);
+    const idx = match ? parseInt(match[1]) % PERIOD_COLORS.length : 0;
+    const c = PERIOD_COLORS[idx];
+    return `${c.border} ${c.bg} ${c.text}${pastModifier}`;
+  }
+
   return `border-slate-100 bg-white text-slate-700${pastModifier}`;
 }
 </script>

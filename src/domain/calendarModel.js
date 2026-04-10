@@ -85,10 +85,13 @@ export function buildCalendarDaysForMonth({
       cssClass += " lastWork";
     } else if (eventDates.has(dateIso)) {
       cssClass += " eventDay";
-    } else if (
-      periodRanges.some((period) => dateIso >= period.startIso && dateIso <= period.endIso)
-    ) {
-      cssClass += " periodDay";
+    } else {
+      const periodIdx = periodRanges.findIndex(
+        (period) => dateIso >= period.startIso && dateIso <= period.endIso
+      );
+      if (periodIdx !== -1) {
+        cssClass += ` periodDay period-${periodIdx}`;
+      }
     } 
 
     days.push({ empty: false, day: d, dateIso, cssClass });

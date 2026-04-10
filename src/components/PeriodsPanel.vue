@@ -8,11 +8,11 @@
 
         <ul v-else class="space-y-2">
             <li
-                v-for="period in periods"
+                v-for="(period, index) in periods"
                 :key="`${period.title}-${period.startDate}-${period.endDate}`"
-                class="rounded-lg border border-indigo-200 bg-white/80 px-3 py-2">
-                <p class="text-sm font-semibold text-indigo-900">{{ period.title }}</p>
-                <p class="text-xs font-medium text-indigo-700">
+                :class="['rounded-lg border px-3 py-2', periodColor(index).border, periodColor(index).bg]">
+                <p :class="['text-sm font-semibold', periodColor(index).text]">{{ period.title }}</p>
+                <p :class="['text-xs font-medium', periodColor(index).text, 'opacity-75']">
                     {{ period.startDate }} - {{ period.endDate }}
                 </p>
             </li>
@@ -21,10 +21,16 @@
 </template>
 
 <script setup>
+import { PERIOD_COLORS } from '../config/periodColors.js';
+
 defineProps({
   periods: {
     type: Array,
     required: true,
   },
 });
+
+function periodColor(index) {
+  return PERIOD_COLORS[index % PERIOD_COLORS.length];
+}
 </script>
