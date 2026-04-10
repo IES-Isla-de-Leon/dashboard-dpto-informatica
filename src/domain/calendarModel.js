@@ -69,6 +69,10 @@ export function buildCalendarDaysForMonth({
     const dateIso = iso(dateNative);
     let cssClass = "day";
 
+    if (dateIso < todayIso) {
+      cssClass += " pastDay";
+    }
+
     if (dateIso === todayIso) {
       cssClass += " today";
     }

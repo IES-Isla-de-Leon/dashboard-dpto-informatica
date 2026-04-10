@@ -37,5 +37,7 @@ describe("domain models", () => {
     expect(findDay(days, 30).cssClass).toContain("lastLective");
     expect(findDay(days, 11).cssClass).toContain("weekend");
     expect(findDay(days, 16).cssClass).toContain("periodDay");
+    expect(findDay(days, 9).cssClass).toContain("pastDay");
+    expect(findDay(days, 10).cssClass).not.toContain("pastDay");
   });
 });
