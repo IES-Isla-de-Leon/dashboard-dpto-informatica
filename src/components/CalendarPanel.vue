@@ -56,6 +56,9 @@ function dayClass(cssClass) {
   if (cssClass.includes("eventDay")) {
     return "border-teal-300 bg-teal-200 text-teal-900";
   }
+  if (cssClass.includes("periodDay")) {
+    return "border-indigo-300 bg-indigo-100 text-indigo-900";
+  }
   if (cssClass.includes("weekend")) {
     return "border-slate-200 bg-slate-100 text-slate-500";
   }

@@ -15,6 +15,7 @@ describe("sheetService", () => {
           { key: "message", value: "Hola" },
           { key: "end_school_date", value: "2026-06-30" },
           { key: "evento Excursión", value: "2026-04-21" },
+          { key: "periodo Evaluaciones", value: "2026-04-10 2026-04-15" },
         ],
       })
     );
@@ -25,6 +26,13 @@ describe("sheetService", () => {
     expect(data.values.end_school_date).toBe("2026-06-30");
     expect(data.events).toEqual([
       { title: " Excursión", date: "2026-04-21" },
+    ]);
+    expect(data.periods).toEqual([
+      {
+        title: "Evaluaciones",
+        startDate: "2026-04-10",
+        endDate: "2026-04-15",
+      },
     ]);
   });
 

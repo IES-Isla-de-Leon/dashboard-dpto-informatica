@@ -11,7 +11,13 @@ const trimesterMonths = {
   3: [3, 4, 5],
 };
 
-export function useDayMetrics({ events, endSchoolDate, endWorkDate, currentTrimester }) {
+export function useDayMetrics({
+  events,
+  periods,
+  endSchoolDate,
+  endWorkDate,
+  currentTrimester,
+}) {
   const dayMarker = ref(Date.now());
 
   useDailyRefresh(() => {
@@ -51,6 +57,7 @@ export function useDayMetrics({ events, endSchoolDate, endWorkDate, currentTrime
         endSchoolDate: endSchoolDate.value,
         endWorkDate: endWorkDate.value,
         events: events.value,
+        periods: periods.value,
       }),
     }));
   });

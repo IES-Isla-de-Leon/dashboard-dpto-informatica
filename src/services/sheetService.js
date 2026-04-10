@@ -4,6 +4,24 @@ function buildMessageSheetUrl(sheetId, tab) {
   return `https://opensheet.elk.sh/${sheetId}/${tab}`;
 }
 
+function parsePeriodRange(value) {
+  const parts = String(value).trim().split(/\s+/);
+  if (parts.length < 2) {
+    return null;
+  }
+
+  const [startDate, endDate] = parts;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+    return null;
+  }
+
+  if (new Date(startDate) > new Date(endDate)) {
+    return null;
+  }
+
+  return { startDate, endDate };
+}
+
 export async function fetchDashboardData() {
   const { googleSheetId, googleSheetTab, defaultMessage } = dashboardConfig;
 
@@ -12,6 +30,7 @@ export async function fetchDashboardData() {
     return {
       values: { default: defaultMessage },
       events: [],
+      periods: [],
     };
   }
 
@@ -25,6 +44,7 @@ export async function fetchDashboardData() {
   const rows = await res.json();
   const values = {};
   const events = [];
+  const periods = [];
 
   for (const { key = "", value = "" } of rows) {
     const normalizedKey = String(key).trim();
@@ -40,13 +60,24 @@ export async function fetchDashboardData() {
         date: String(value),
       });
     }
+
+    if (normalizedKey.startsWith("periodo")) {
+      const parsedRange = parsePeriodRange(value);
+      if (parsedRange) {
+        periods.push({
+          title: normalizedKey.slice(7).trim() || "Periodo",
+          startDate: parsedRange.startDate,
+          endDate: parsedRange.endDate,
+        });
+      }
+    }
   }
 
   if (!values.default) {
     values.default = defaultMessage;
   }
 
-  return { values, events };
+  return { values, events, periods };
 }
 
 export function buildFinalEvents(values, events, config = dashboardConfig) {

@@ -28,6 +28,7 @@ describe("domain models", () => {
       endSchoolDate: "2026-04-30",
       endWorkDate: "2026-04-29",
       events: [{ title: "Evento", date: "2026-04-15" }],
+      periods: [{ title: "Periodo", startDate: "2026-04-16", endDate: "2026-04-18" }],
     });
 
     expect(findDay(days, 10).cssClass).toContain("today");
@@ -35,5 +36,6 @@ describe("domain models", () => {
     expect(findDay(days, 29).cssClass).toContain("lastWork");
     expect(findDay(days, 30).cssClass).toContain("lastLective");
     expect(findDay(days, 11).cssClass).toContain("weekend");
+    expect(findDay(days, 16).cssClass).toContain("periodDay");
   });
 });

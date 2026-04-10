@@ -5,6 +5,7 @@ import { buildFinalEvents, fetchDashboardData } from "../services/sheetService";
 export function useDashboardData() {
   const values = ref({ default: dashboardConfig.defaultMessage });
   const events = ref([]);
+  const periods = ref([]);
   const isLoading = ref(false);
   const error = ref(null);
 
@@ -18,6 +19,7 @@ export function useDashboardData() {
       const data = await fetchDashboardData();
       values.value = data.values;
       events.value = buildFinalEvents(data.values, data.events, dashboardConfig);
+      periods.value = data.periods || [];
     } catch (e) {
       error.value = e;
       console.error("Error hoja:", e);
@@ -57,6 +59,7 @@ export function useDashboardData() {
   return {
     values,
     events,
+    periods,
     isLoading,
     error,
     messageText,

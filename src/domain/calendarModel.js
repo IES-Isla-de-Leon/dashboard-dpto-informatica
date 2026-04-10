@@ -16,7 +16,7 @@ export const MONTHS_ES = [
   "Diciembre",
 ];
 
-export function buildCalendarDays({ now, endSchoolDate, endWorkDate, events }) {
+export function buildCalendarDays({ now, endSchoolDate, endWorkDate, events, periods = [] }) {
   return buildCalendarDaysForMonth({
     year: now.getFullYear(),
     monthIndex: now.getMonth(),
@@ -24,6 +24,7 @@ export function buildCalendarDays({ now, endSchoolDate, endWorkDate, events }) {
     endSchoolDate,
     endWorkDate,
     events,
+    periods,
   });
 }
 
@@ -34,6 +35,7 @@ export function buildCalendarDaysForMonth({
   endSchoolDate,
   endWorkDate,
   events,
+  periods = [],
 }) {
   const firstDay = new Date(year, monthIndex, 1);
   const offset = (firstDay.getDay() + 6) % 7;
@@ -43,6 +45,18 @@ export function buildCalendarDaysForMonth({
   const endSchoolIso = iso(toLocalDate(endSchoolDate));
   const endWorkIso = iso(toLocalDate(endWorkDate));
   const eventDates = new Set(events.map((event) => event.date));
+
+  const periodRanges = periods
+    .map((period) => ({
+      startIso: period.startDate,
+      endIso: period.endDate,
+    }))
+    .filter(
+      (period) =>
+        /^\d{4}-\d{2}-\d{2}$/.test(period.startIso) &&
+        /^\d{4}-\d{2}-\d{2}$/.test(period.endIso) &&
+        period.startIso <= period.endIso
+    );
 
   const days = [];
 
@@ -65,6 +79,10 @@ export function buildCalendarDaysForMonth({
       cssClass += " lastWork";
     } else if (eventDates.has(dateIso)) {
       cssClass += " eventDay";
+    } else if (
+      periodRanges.some((period) => dateIso >= period.startIso && dateIso <= period.endIso)
+    ) {
+      cssClass += " periodDay";
     } else if (isWeekend(dateNative)) {
       cssClass += " weekend";
     }
