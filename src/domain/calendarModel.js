@@ -79,6 +79,8 @@ export function buildCalendarDaysForMonth({
 
     if (dateIso === endSchoolIso) {
       cssClass += " lastLective";
+    }else if (isWeekend(dateNative)) {
+      cssClass += " weekend";
     } else if (dateIso === endWorkIso) {
       cssClass += " lastWork";
     } else if (eventDates.has(dateIso)) {
@@ -87,9 +89,7 @@ export function buildCalendarDaysForMonth({
       periodRanges.some((period) => dateIso >= period.startIso && dateIso <= period.endIso)
     ) {
       cssClass += " periodDay";
-    } else if (isWeekend(dateNative)) {
-      cssClass += " weekend";
-    }
+    } 
 
     days.push({ empty: false, day: d, dateIso, cssClass });
   }

@@ -9,26 +9,8 @@
         />
         <CountersPanel :school-days="schoolDays" :work-days="workDays" />
 
-        <section class="rounded-xl border border-indigo-200 bg-indigo-50/70 p-4">
-          <h3 class="mb-3 text-lg font-semibold text-indigo-900">Periodos</h3>
-
-          <div v-if="periods.length === 0" class="text-sm text-indigo-700/70">
-            No hay periodos configurados
-          </div>
-
-          <ul v-else class="space-y-2">
-            <li
-              v-for="period in periods"
-              :key="`${period.title}-${period.startDate}-${period.endDate}`"
-              class="rounded-lg border border-indigo-200 bg-white/80 px-3 py-2"
-            >
-              <p class="text-sm font-semibold text-indigo-900">{{ period.title }}</p>
-              <p class="text-xs font-medium text-indigo-700">
-                {{ period.startDate }} - {{ period.endDate }}
-              </p>
-            </li>
-          </ul>
-        </section>
+        <PeriodsPanel :periods="periods" />
+        
       </div>
 
       <EventList :events="events" />
@@ -61,6 +43,7 @@ import CalendarPanel from "./components/CalendarPanel.vue";
 import ClockPanel from "./components/ClockPanel.vue";
 import CountersPanel from "./components/CountersPanel.vue";
 import EventList from "./components/EventList.vue";
+import PeriodsPanel from "./components/PeriodsPanel.vue";
 import { useDashboardData } from "./composables/useDashboardData";
 import { useDayMetrics } from "./composables/useDayMetrics";
 import { useClock } from "./composables/useClock";

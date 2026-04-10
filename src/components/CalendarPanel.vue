@@ -51,6 +51,9 @@ function dayClass(cssClass) {
   if (cssClass.includes("lastLective")) {
     return `border-emerald-300 bg-emerald-200 text-emerald-900${pastModifier}`;
   }
+  if (cssClass.includes("weekend")) {
+    return `border-slate-200 bg-slate-100 text-slate-500${pastModifier}`;
+  }
   if (cssClass.includes("lastWork")) {
     return `border-cyan-300 bg-cyan-200 text-cyan-900${pastModifier}`;
   }
@@ -62,10 +65,8 @@ function dayClass(cssClass) {
   }
   if (cssClass.includes("periodDay")) {
     return `border-indigo-300 bg-indigo-100 text-indigo-900${pastModifier}`;
-  }
-  if (cssClass.includes("weekend")) {
-    return `border-slate-200 bg-slate-100 text-slate-500${pastModifier}`;
-  }
+  }  
+  
   return `border-slate-100 bg-white text-slate-700${pastModifier}`;
 }
 </script>
