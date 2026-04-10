@@ -1,126 +1,21 @@
-html,
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  background: #111;
-  color: #f4f4f4;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f9ff 0%, #f1f5f9 55%, #ecfdf5 100%);
+  color: #334155;
   font-family: "Segoe UI", Roboto, sans-serif;
-  text-align: center;
-  gap: 3rem;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-#app {
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  gap: 3rem;
-  width: 100%;
-}
-
-#wrapper-left {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-}
-
-#wrapper-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-#time {
-  font-size: 6rem;
-  font-weight: 700;
-  letter-spacing: 3px;
-}
-
-#date {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  text-transform: capitalize;
-}
-
-.counter {
-  font-size: 3rem;
-}
-
-#message {
-  margin-top: 2rem;
-  font-size: 1.6rem;
-  font-style: italic;
-  opacity: 0.85;
-  min-height: 3.2rem;
-}
-
-#calendar {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(2.8rem, 1fr));
-  gap: 4px;
-  margin-top: 1.2rem;
-  user-select: none;
-}
-
-.day {
-  padding: 0.35rem 0;
-  border-radius: 4px;
-  font-size: 1.15rem;
-  line-height: 1;
-  opacity: 0.85;
-}
-
-.header {
-  font-weight: 600;
-  opacity: 1;
-}
-
-.today {
-  background: #0d6efd;
-  color: #fff;
-}
-
-.lastLective {
-  background: #28a745;
-  color: #fff;
-}
-
-.eventDay {
-  background: #a72896 !important;
-  color: #fff;
-}
-
-.lastWork {
-  background: #ffc107;
-  color: #000;
-}
-
-.weekend {
-  background: #ee2222;
-  color: #fff;
-}
-
-.event {
-  display: flex;
-  padding: 1rem;
-}
-
-.event + .event {
-  border-top: 1px solid white;
-}
-
-.event-date {
-  width: 8rem;
-}
-
-.event-title {
-  font-weight: bold;
-}
-
-.striked {
-  text-decoration: line-through;
+.panel {
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1.5rem;
+  box-shadow: 0 20px 30px -15px rgba(15, 23, 42, 0.25);
+  backdrop-filter: blur(4px);
 }

@@ -38,6 +38,11 @@ export function useDashboardData() {
     () => values.value.end_work_date || dashboardConfig.defaultEndWorkDate
   );
 
+  const currentTrimester = computed(() => {
+    const parsedTrimester = Number(values.value.current_trimester);
+    return [1, 2, 3].includes(parsedTrimester) ? parsedTrimester : 3;
+  });
+
   onMounted(async () => {
     await refresh();
     refreshIntervalId = setInterval(refresh, dashboardConfig.refreshIntervalMs);
@@ -57,6 +62,7 @@ export function useDashboardData() {
     messageText,
     endSchoolDate,
     endWorkDate,
+    currentTrimester,
     refresh,
   };
 }

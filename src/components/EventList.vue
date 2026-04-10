@@ -1,19 +1,24 @@
 <template>
-  <div>
-    <h2>Lista de eventos</h2>
-    <div id="event-list">
+  <section class="panel">
+    <h2 class="mb-4 text-2xl font-semibold text-slate-700">Lista de eventos</h2>
+    <div class="space-y-2">
       <div
         v-for="event in events"
         :key="`${event.title}-${event.date}`"
-        class="event"
+        class="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50/80 px-4 py-3"
       >
-        <div class="event-date">{{ event.date }}</div>
-        <div class="event-title" :class="{ striked: isPastEvent(event.date) }">
+        <div class="rounded-md bg-white px-2 py-1 text-sm font-medium text-slate-600">
+          {{ event.date }}
+        </div>
+        <div
+          class="text-right text-base font-semibold text-slate-700"
+          :class="{ 'line-through opacity-50': isPastEvent(event.date) }"
+        >
           {{ event.title }}
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>
